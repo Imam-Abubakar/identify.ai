@@ -1,9 +1,133 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url("https://api.fontshare.com/v2/css?f[]=chillax@600,500,300,700,400,200&display=swap");
+
+
+@font-face {
+  font-family: EuclidBold;
+  src: url("./assets/fonts/Euclid Circular A Bold.ttf")
+}
+
+@font-face {
+  font-family: EuclidBoldItalic;
+  src: url("./assets/fonts/Euclid Circular A Bold Italic.ttf")
+}
+
+@font-face {
+  font-family: EuclidItalic;
+  src: url("./assets/fonts/Euclid Circular A Italic.ttf")
+}
+
+@font-face {
+  font-family: EuclidLight;
+  src: url("./assets/fonts/Euclid Circular A Light.ttf")
+}
+
+@font-face {
+  font-family: EuclidLightItalic;
+  src: url("./assets/fonts/Euclid Circular A Light Italic.ttf")
+}
+
+@font-face {
+  font-family: EuclidMedium;
+  src: url("./assets/fonts/Euclid Circular A Medium.ttf")
+}
+
+@font-face {
+  font-family: EuclidMediumItalic;
+  src: url("./assets/fonts/Euclid Circular A Medium Italic.ttf")
+}
+
+@font-face {
+  font-family: EuclidRegular;
+  src: url("./assets/fonts/Euclid Circular A Regular.ttf")
+}
+
+@font-face {
+  font-family: EuclidSemiBold;
+  src: url("./assets/fonts/Euclid Circular A SemiBold.ttf")
+}
+
+@font-face {
+  font-family: EuclidSemiBoldItalic;
+  src: url("./assets/fonts/Euclid Circular A SemiBold Italic.ttf")
+}
+
+@font-face {
+  font-family: Almarena;
+  src: url("./assets/fonts/Almarena.otf") format("opentype")
+}
+
+@font-face {
+  font-family: AlmarenaBold;
+  src: url("./assets/fonts/Almarena Bold.otf") format("opentype")
+}
+
+@font-face {
+  font-family: AlmarenaDisplayBold;
+  src: url("./assets/fonts/Almarena Display Bold.otf") format("opentype")
+}
+
+@font-face {
+  font-family: AlmarenaDisplayLight;
+  src: url("./assets/fonts/Almarena Display Light.otf") format("opentype")
+}
+
+@font-face {
+  font-family: AlmarenaDisplayRegular;
+  src: url("./assets/fonts/Almarena Display Regular.otf") format("opentype")
+}
+
+@font-face {
+  font-family: AlmarenaLight;
+  src: url("./assets/fonts/Almarena Light.otf") format("opentype")
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+    touch-action: pan-x pan-y !important;
+    -webkit-user-scalable: no;
+    -ms-user-scalable: none;
+    -user-scalable: no;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+   
+  }
+
+
 body {
-    font-family: 'Open Sans';
+  font-family: "Almarena";
+  touch-action: manipulation;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+    display: none;
+  }
+
+.font-al-900 {
+  font-family: "AlmarenaDisplayBold";
+}
+
+.font-al-800 {
+  font-family: "AlmarenaBold";
+}
+
+.font-al-700{
+  font-family: "AlmarenaBold";
+}
+
+.font-al-400{
+  font-family: "AlmarenaDisplayRegular";
+}
+
+.font-al-300 {
+  font-family: "AlmarenaLight";
+}
+
+.font-al-200 {
+  font-family: "AlmarenaDisplayLight";
+}
+  
