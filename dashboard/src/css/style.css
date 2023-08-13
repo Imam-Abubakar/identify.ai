@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback');
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+
+/* Additional styles */
+@import 'additional-styles/utility-patterns.css';
+@import 'additional-styles/flatpickr.css';
+
+@import 'tailwindcss/utilities';
+
+
+@font-face {
+    font-family: EuclidBold;
+    src: url("./fonts/Euclid Circular A Bold.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidBoldItalic;
+    src: url("./fonts/Euclid Circular A Bold Italic.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidItalic;
+    src: url("./fonts/Euclid Circular A Italic.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidLight;
+    src: url("./fonts/Euclid Circular A Light.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidLightItalic;
+    src: url("./fonts/Euclid Circular A Light Italic.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidMedium;
+    src: url("./fonts/Euclid Circular A Medium.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidMediumItalic;
+    src: url("./fonts/Euclid Circular A Medium Italic.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidRegular;
+    src: url("./fonts/Euclid Circular A Regular.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidSemiBold;
+    src: url("./fonts/Euclid Circular A SemiBold.ttf")
+  }
+  
+  @font-face {
+    font-family: EuclidSemiBoldItalic;
+    src: url("./fonts/Euclid Circular A SemiBold Italic.ttf")
+  }
+  
+  @font-face {
+    font-family: Almarena;
+    src: url("./fonts/Almarena.otf") format("opentype")
+  }
+  
+  @font-face {
+    font-family: AlmarenaBold;
+    src: url("./fonts/Almarena Bold.otf") format("opentype")
+  }
+  
+  @font-face {
+    font-family: AlmarenaDisplayBold;
+    src: url("./fonts/Almarena Display Bold.otf") format("opentype")
+  }
+  
+  @font-face {
+    font-family: AlmarenaDisplayLight;
+    src: url("./fonts/Almarena Display Light.otf") format("opentype")
+  }
+  
+  @font-face {
+    font-family: AlmarenaDisplayRegular;
+    src: url("./fonts/Almarena Display Regular.otf") format("opentype")
+  }
+  
+  @font-face {
+    font-family: AlmarenaLight;
+    src: url("./fonts/Almarena Light.otf") format("opentype")
+  }
+
+
+
+.font-al-900 {
+  font-family: "AlmarenaDisplayBold";
+}
+
+.font-al-800 {
+  font-family: "AlmarenaBold";
+}
+
+.font-al-700{
+  font-family: "AlmarenaBold";
+}
+
+.font-al-400{
+  font-family: "AlmarenaDisplayRegular";
+}
+
+.font-al-300 {
+  font-family: "AlmarenaLight";
+}
+
+.font-al-200 {
+  font-family: "AlmarenaDisplayLight";
+}

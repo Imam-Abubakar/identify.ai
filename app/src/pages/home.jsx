@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import user from "../assets/user.webp";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { FaCamera, FaFileLines, FaHouseChimney } from "react-icons/fa6";
 
 const Home = () => {
@@ -14,7 +16,7 @@ const Home = () => {
                             </h1>
                             <div className="bg-[#f0f0b6] shadow-md flex flex-col justify-center items-center px-2 py-6  text-black mt-2 mb-4">
                                 <p className="text-sm mt-2 font-al-400 mb-[-10px]">TOTAL FACE SCANS</p>
-                                <h1 className="text-4xl my-2 font-al-900">263</h1>
+                                <h1 className="text-5xl my-2 font-al-900">263</h1>
                             </div>
 
                         </div>
