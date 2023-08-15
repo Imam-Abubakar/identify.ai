@@ -42,24 +42,16 @@ let transporter = nodemailer.createTransport({
 });
 
 // FACE PROCESSING
-async function processImages(images) {
+async function processImages(image) {
   try {
     let counter = 0;
-    const descriptions = [];
-    // Loop through the images
-    for (let i = 0; i < images.length; i++) {
-      const img = await canvas.loadImage(images[i]);
-      counter = (i / images.length) * 100;
-      console.log(`Progress = ${counter}%`);
-      // Read each face and save the face descriptions in the descriptions array
-      const detections = await faceapi
-        .detectSingleFace(img)
-        .withFaceLandmarks()
-        .withFaceDescriptor();
-      descriptions.push(detections);
-      console.log(detections)
-    }
-
+    let descriptions;
+    const img = await canvas.loadImage(image);
+    const detections = await faceapi
+      .detectSingleFace(img)
+      .withFaceLandmarks()
+      .withFaceDescriptor();
+    descriptions = detections.descriptor;
     return descriptions;
   } catch (error) {
     console.log(error);
@@ -72,18 +64,14 @@ async function getDescriptorsFromDB(image) {
   // Get all the face data from mongodb and loop through each of them to read the data
   let faces = await Criminal.find();
   for (i = 0; i < faces.length; i++) {
-    // Change the face data descriptors from Objects to Float32Array type
     for (j = 0; j < faces[i].descriptions.length; j++) {
-      faces[i].descriptions[j] = new Float32Array(
-        Object.values(faces[i].descriptions[j])
-      );
+      faces[i].descriptions[j] = new Float32Array(Object.values(faces[i].descriptions[j]));
     }
     // Turn the DB face docs to
-    faces[i] = new faceapi.LabeledFaceDescriptors(
-      faces[i].label,
-      faces[i].descriptions
-    );
+    faces[i] = new faceapi.LabeledFaceDescriptors(faces[i].firstName, faces[i].descriptions);
   }
+
+  console.log(faces);
 
   // Load face matcher to find the matching face
   const faceMatcher = new faceapi.FaceMatcher(faces, 0.6);
@@ -94,16 +82,16 @@ async function getDescriptorsFromDB(image) {
   // Process the image for the model
   const displaySize = { width: img.width, height: img.height };
   faceapi.matchDimensions(temp, displaySize);
-
   // Find matching faces
   const detections = await faceapi
     .detectAllFaces(img)
     .withFaceLandmarks()
     .withFaceDescriptors();
+
   const resizedDetections = faceapi.resizeResults(detections, displaySize);
-  const results = resizedDetections.map((d) =>
-    faceMatcher.findBestMatch(d.descriptor)
-  );
+  const results = resizedDetections.map((d) => {
+    faceMatcher.findBestMatch(d.descriptor);
+  });
   return results;
 }
 
@@ -384,7 +372,8 @@ router.post("/criminal/add", async (req, res) => {
     !dateOfBirth ||
     !nationality ||
     !gender ||
-    !criminalRecord
+    !criminalRecord ||
+    !mugshot
   ) {
     return res
       .status(422)
@@ -397,7 +386,7 @@ router.post("/criminal/add", async (req, res) => {
 
   console.log(req.body);
 
-  let result = await processImages([File1, File2, File3]);
+  let result = await processImages(File1);
   console.log(result);
   try {
     const newCriminal = new Criminal({
@@ -418,6 +407,9 @@ router.post("/criminal/add", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while saving the criminal" });
   }
 });
 
@@ -425,11 +417,12 @@ router.post("/criminal/add", async (req, res) => {
 router.post("/criminal/find", async (req, res) => {
   const File1 = req.files.File1.tempFilePath;
   let result = await getDescriptorsFromDB(File1);
+  console.log(result);
   res.json({ result });
 });
 
 // GET CRIMINALS
-router.get("/criminals", async(req, res) => {
+router.get("/criminals", async (req, res) => {
   const allCriminals = await Criminal.find();
   res.send(allCriminals);
 });

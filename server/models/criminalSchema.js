@@ -28,8 +28,11 @@ const criminalSchema = new mongoose.Schema({
     required: true,
   },
   criminalRecord: {
-    type: [String], 
+    type: String, 
     default: [],
+  },
+  detected: {
+    type: String,
   },
   createdDate: {
     type: Date,
