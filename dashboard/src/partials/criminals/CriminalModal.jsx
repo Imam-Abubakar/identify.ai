@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
+import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 
 const CriminalModal = () => {
@@ -14,17 +15,44 @@ const CriminalModal = () => {
     const [mugshot, setMugshot] = useState('');
     const [files, setFiles] = useState([null, null, null]);
     const [message, setMessage] = useState('');
+    const [progress, setProgress] = useState(0)
+
+
+    const onDrop = useCallback((acceptedFiles) => {
+        const url = "https://api.cloudinary.com/v1_1/almpo/image/upload";
+
+        acceptedFiles.forEach(async (acceptedFile) => {
+
+            const formData = new FormData();
+            formData.append("file", acceptedFile);
+            formData.append(
+                "upload_preset",
+                "invoice"
+            );
+
+            const response = await fetch(url, {
+                method: "post",
+                body: formData,
+            });
+            setProgress(100)
+            const data = await response.json();
+
+            setMugshot(data.secure_url)
+            console.log(data)
+        });
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accepts: "image/*",
+        multiple: false,
+    });
 
     const handleFileChange = (index, e) => {
         const selectedFile = e.target.files[0];
         const updatedFiles = [...files];
         updatedFiles[index] = selectedFile;
         setFiles(updatedFiles);
-    };
-
-    const handleMugshotChange = (e) => {
-        const selectedFile = e.target.files[0];
-        setMugshot(selectedFile);
     };
 
     const addCriminal = async (e) => {
@@ -75,6 +103,8 @@ const CriminalModal = () => {
         }
 
     };
+
+    console.log(mugshot)
 
     // Function to open the modal
     const openModal = () => {
@@ -199,25 +229,23 @@ const CriminalModal = () => {
                                             />
 
                                             <label className="text-sm mb-2 font-al-900">Mugshot</label>
-                                            <input type="file" accept="image/*" onChange={handleMugshotChange} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
+                                            {mugshot === "" ?
+                                                <div
+                                                    {...getRootProps()}
+                                                    className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1"
+                                                >
+                                                    <input {...getInputProps()} />
+                                                    Upload Image
+                                                </div>
+                                                :
+                                                <img src={mugshot} alt="Image" className="border-[2px] outline-none text-md font-al-900 border-black w-[100px] mb-1" />
+                                            }
+
                                             <label className="text-sm mb-2 font-al-900">Images(3)</label>
 
-                                            <input type="file" accept="image/*" onChange={(e) => handleFileChange(0, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
-                                            <input type="file" accept="image/*" onChange={(e) => handleFileChange(1, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
-                                            <input type="file" accept="image/*" onChange={(e) => handleFileChange(2, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-6" />
-
-                                            {/* The criminal record field could be implemented as a list of text areas */}
-                                            {/* Example:
-                    <label className="text-sm mb-2 font-al-900">Criminal Record</label>
-                    <textarea
-                        placeholder="Enter Criminal Record (one entry per line)"
-                        value={criminalRecord.join('\n')}
-                        onChange={(e) => setCriminalRecord(e.target.value.split('\n'))}
-                        required
-                        className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-6"
-                        rows={4}
-                    />
-                    */}
+                                            <input type="file" accept="image/jpeg" onChange={(e) => handleFileChange(0, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
+                                            <input type="file" accept="image/jpeg" onChange={(e) => handleFileChange(1, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
+                                            <input type="file" accept="image/jpeg" onChange={(e) => handleFileChange(2, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-6" />
 
                                             <button
                                                 onClick={addCriminal}

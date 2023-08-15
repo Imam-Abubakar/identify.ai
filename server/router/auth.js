@@ -179,6 +179,7 @@ router.post("/register/admin", async (req, res) => {
 router.post("/login/user", async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(req.body)
 
     if (!email || !password) {
       return res
@@ -201,7 +202,8 @@ router.post("/login/user", async (req, res) => {
       if (!matchPassword) {
         return res.status(400).json({ message: "Invalid Credentials" });
       } else {
-        return res.status(200).json({ message: "Login Successful" });
+        const { _id, name, email} = userLogin;
+        return res.status(200).json({ message: "Login Successful", token: token, user: {_id, name, email} });
       }
     } else {
       return res.status(400).json({ message: "Invalid Credentials" });
@@ -249,8 +251,22 @@ router.post("/login/admin", async (req, res) => {
 });
 
 // GET USER PROFILE PAGE
-router.get("/profile/user", userAuthenticate, (req, res) => {
-  res.send(req.rootuser);
+router.get("/profile/user/:id", async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await User.findById(userId)
+
+    if (!user) {
+      return res.status(400).json({
+        error: 'User not found',
+      });
+    }
+    console.log('fetching user');
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+  }
+   
 });
 
 // GET admin PROFILE PAGE
