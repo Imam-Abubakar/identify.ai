@@ -88,7 +88,7 @@ const CriminalModal = () => {
 
 
         try {
-            const response = await axios.post('https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io/criminal/add', formData, {
+            const response = await axios.post('https://identify-api-jf4t.onrender.com/criminal/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

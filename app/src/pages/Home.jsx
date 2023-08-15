@@ -11,7 +11,7 @@ const Home = () => {
     const auth = JSON.parse(window.localStorage.getItem("token"));
     const navigate = useNavigate();
 
-    const API_BASE_URL = "https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io";
+    const API_BASE_URL = "https://identify-api-jf4t.onrender.com";
     const [userData, setUserData] = useState([]);
 
     useEffect(() => {
