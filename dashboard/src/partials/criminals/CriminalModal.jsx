@@ -13,7 +13,7 @@ const CriminalModal = () => {
     const [gender, setGender] = useState('');
     const [criminalRecord, setCriminalRecord] = useState('');
     const [mugshot, setMugshot] = useState('');
-    const [files, setFiles] = useState([null, null, null]);
+    const [files, setFiles] = useState(null);
     const [message, setMessage] = useState('');
     const [progress, setProgress] = useState(0)
 
@@ -48,11 +48,9 @@ const CriminalModal = () => {
         multiple: false,
     });
 
-    const handleFileChange = (index, e) => {
+    const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
-        const updatedFiles = [...files];
-        updatedFiles[index] = selectedFile;
-        setFiles(updatedFiles);
+        setFiles(selectedFile);
     };
 
     const addCriminal = async (e) => {
@@ -68,7 +66,7 @@ const CriminalModal = () => {
             !gender ||
             !criminalRecord ||
             !mugshot ||
-            files.some((file) => file === null)
+            !files
         ) {
             setMessage('Please fill all the details properly.');
             return;
@@ -82,11 +80,8 @@ const CriminalModal = () => {
         formData?.append('gender', gender);
         formData?.append('criminalRecord', criminalRecord);
         formData?.append('mugshot', mugshot);
-        files.forEach((file, index) => {
-            formData?.append(`File${index + 1}`, file);
-        });
-
-
+        formData?.append(`File1`, files);
+        
         try {
             const response = await axios.post('https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io/criminal/add', formData, {
                 headers: {
@@ -241,12 +236,10 @@ const CriminalModal = () => {
                                                 <img src={mugshot} alt="Image" className="border-[2px] outline-none text-md font-al-900 border-black w-[100px] mb-1" />
                                             }
 
-                                            <label className="text-sm mb-2 font-al-900">Images(3)</label>
+                                            <label className="text-sm mb-2 font-al-900">Extra image</label>
 
-                                            <input type="file" accept="image/jpeg" onChange={(e) => handleFileChange(0, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
-                                            <input type="file" accept="image/jpeg" onChange={(e) => handleFileChange(1, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
-                                            <input type="file" accept="image/jpeg" onChange={(e) => handleFileChange(2, e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-6" />
-
+                                            <input type="file" accept="image/jpeg" onChange={(e) => handleFileChange(e)} className="border-[2px] outline-none text-md font-al-900 border-black py-3 pl-4 w-full mb-1" />
+                                           
                                             <button
                                                 onClick={addCriminal}
                                                 className="w-[60%] mx-auto bg-black border-[2px] hover:border-black hover:text-black hover:bg-white font-semibold border-white text-white px-4 mt-2 mb-16 py-2"

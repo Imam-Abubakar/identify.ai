@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from "../images/logo-name.png"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const userID = window.localStorage.getItem("admin");
+
     const navigate = useNavigate();
 
+    const registerError = (message) => toast.error(message);
+    const registerSuccess = (message) => toast.success(message);
+
+    useEffect(() => {
+        if (userID) {
+          navigate("/")
+        }
+      }, [])
 
     let formData = {
         email: email, password: password
@@ -16,24 +28,29 @@ const Login = () => {
     const sendData = async (e) => {
         e.preventDefault();
 
-        const response = await fetch("https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io/login/admin", {
+        const response = await fetch("https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io/login/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData),
+            body:JSON.stringify(formData),
         });
 
         const newUserData = await response.json();
-        if (response.status === 400 || !newUserData) {
+        if (response.status === 400) {
+            registerError(newUserData.message);
         } else {
             console.log("Logged in successfully")
-            window.localStorage.setItem("userID", true);
-            navigate("/home");
+            registerSuccess("Successful Login");
+            window.localStorage.setItem("admin", JSON.stringify(newUserData.user));
+            window.localStorage.setItem("token", JSON.stringify(newUserData.token))
+         
+            navigate("/");
         }
     };
     return (
         <div className="flex  h-screen p-4 ">
+            <ToastContainer />
             <div className='mx-auto w-full md:w-[40vw] text-center mb-15 items-center gap-1'>
                 <img src={logo} alt='Image 1' className='w-[6rem] mx-auto my-[2rem] ' />
                 <h1 className='text-4xl font-al-900'>Admin Login</h1>

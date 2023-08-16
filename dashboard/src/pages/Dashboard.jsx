@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 import WelcomeBanner from '../partials/dashboard/WelcomeBanner';
@@ -10,6 +10,14 @@ import TotalRegistered from '../partials/dashboard/TotalRegistered';
 import TotalScanned from '../partials/dashboard/TotalScanned';
 
 function Dashboard() {
+  const userID = JSON.parse(window.localStorage.getItem("admin"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      if (userID == null | undefined) {
+          navigate("/login")
+      }
+  }, [])
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

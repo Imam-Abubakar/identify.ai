@@ -64,14 +64,12 @@ function CriminalsTable() {
                       <div className="font-semibold text-center">Nationality</div>
                     </th>
                     <th className="p-2">
-                      <div className="font-semibold text-center">Crime</div>
-                    </th>
-                    <th className="p-2">
                       <div className="font-semibold text-center">Gender</div>
                     </th>
                     <th className="p-2">
-                      <div className="font-semibold text-center">Action</div>
+                      <div className="font-semibold text-center">Crime</div>
                     </th>
+                    
                   </tr>
                 </thead>
                 {/* Table body */}
@@ -99,19 +97,16 @@ function CriminalsTable() {
                           {entry?.nationality}
                         </div>
                       </td>
-                      <td className="p-2">
-                        <div className="text-center uppercase">
-                          {entry?.criminalRecord}
-                        </div>
-                      </td>
+                      
                       <td className="p-2 uppercase">
                         <div className="text-center">{entry?.gender}</div>
                       </td>
                       <td className="p-2">
-                        <div className="text-center mx-auto bg-emerald-500 font-semibold py-2 px-3 hover:bg-slate-500 cursor-pointer w-max" onClick={() => { viewUser(entry?.address) }}>
-                          View Criminal
+                        <div className="text-center w-[80%] mx-auto uppercase">
+                          {entry?.criminalRecord}
                         </div>
                       </td>
+                      
                     </tr>
                   ))}
                 </tbody>

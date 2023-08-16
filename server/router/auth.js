@@ -44,7 +44,7 @@ let transporter = nodemailer.createTransport({
 // FACE PROCESSING
 async function processImages(image) {
   try {
-    let counter = 0;
+    console.log("File>>>", image);
     let descriptions;
     const img = await canvas.loadImage(image);
     const detections = await faceapi
@@ -95,7 +95,7 @@ async function getDescriptorsFromDB(image) {
 
   const resizedDetections = faceapi.resizeResults(detections, displaySize);
   const results = resizedDetections.map((d) => {
-    faceMatcher.findBestMatch(d.descriptor);
+    return faceMatcher.findBestMatch(d.descriptor);
   });
   return results;
 }
@@ -151,6 +151,12 @@ router.post("/register/admin", async (req, res) => {
 
   try {
     const userExists = await Admin.findOne({ email: email });
+
+    if (!firstname || !lastname || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Please fill the details properly" });
+    }
     if (userExists) {
       return res.status(422).json({ message: "User Already Exists" });
     } else {
@@ -233,7 +239,7 @@ router.post("/login/admin", async (req, res) => {
         .json({ message: "Please fill the details properly" });
     }
 
-    const adminLogin = await admin.findOne({ email: email });
+    const adminLogin = await Admin.findOne({ email: email });
 
     if (adminLogin) {
       const matchPassword = await bcrypt.compare(password, adminLogin.password);
@@ -247,9 +253,14 @@ router.post("/login/admin", async (req, res) => {
       });
 
       if (!matchPassword) {
-        res.status(400).json({ message: "Invalid Credentials" });
+        return res.status(400).json({ message: "Invalid Credentials" });
       } else {
-        res.status(200).json({ message: "Login Successful" });
+        const { _id, name, email } = userLogin;
+        return res.status(200).json({
+          message: "Login Successful",
+          token: token,
+          user: { _id, firstname, lastname, email },
+        });
       }
     } else {
       res.status(400).json({ message: "Invalid Credentials" });
@@ -291,7 +302,7 @@ router.get("/logout/user", (req, res) => {
 // admin LOGOUT PAGE
 router.get("/logout/admin", (req, res) => {
   res.clearCookie("jwttoken", { path: "/" });
-  res.status(200).send("Logout successfull");
+  res.status(200).send("Logout successful");
 });
 
 // Email through nodemailer : sending subject and class code to all users of the department
@@ -405,13 +416,8 @@ router.post("/criminal/add", async (req, res) => {
   }
 
   const File1 = req.files.File1.tempFilePath;
-  const File2 = req.files.File2.tempFilePath;
-  const File3 = req.files.File3.tempFilePath;
-
-  console.log(req.body);
 
   let result = await processImages(File1);
-  console.log(result);
   try {
     const newCriminal = new Criminal({
       firstName,
@@ -441,8 +447,22 @@ router.post("/criminal/add", async (req, res) => {
 router.post("/criminal/find", async (req, res) => {
   const File1 = req.files.File1.tempFilePath;
   let result = await getDescriptorsFromDB(File1);
-  console.log(result);
-  res.json({ result });
+  if ((result == null) | undefined) {
+    res.json({ result });
+  }
+  const firstName = result[0]._label;
+
+  try {
+    const criminalDetails = await Criminal.findOne({ firstName });
+    if (criminalDetails) {
+      res.json({ result, criminalDetails });
+    } else {
+      res.json({ result, message: "Criminal not found in the database" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 });
 
 // GET CRIMINALS
@@ -503,7 +523,5 @@ router.get("/user/scan/history/:id", async (req, res) => {
       .json({ message: "An error occurred while retrieving scan history" });
   }
 });
-
-module.exports = router;
 
 module.exports = router;

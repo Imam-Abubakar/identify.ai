@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from "../images/logo-name.png"
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
     const [firstname, setFirstname] = useState("");
@@ -8,11 +10,22 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const userID = window.localStorage.getItem("admin");
+
     const navigate = useNavigate();
+
+    const registerError = (message) => toast.error(message);
+    const registerSuccess = (message) => toast.success(message);
 
     let formData = {
         firstname: firstname, lastname: lastname, email: email, password: password
     };
+
+    useEffect(() => {
+        if (userID) {
+          navigate("/home")
+        }
+      }, [])
 
     const sendData = async (e) => {
         e.preventDefault();
@@ -34,6 +47,7 @@ const Register = () => {
     };
     return (
         <div className="flex  h-screen p-4 ">
+            <ToastContainer />
             <div className='mx-auto w-full md:w-[40vw] text-center items-center mb-15 gap-1'>
                 <img src={logo} alt='Image 1' className='w-[6rem] mx-auto my-[2rem] ' />
                 <h1 className='text-4xl font-al-900'>Admin Registration</h1>
