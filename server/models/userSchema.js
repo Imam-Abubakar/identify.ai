@@ -1,6 +1,23 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
+const scanRecordSchema = new mongoose.Schema({
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  result: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+  },
+  details: {
+    type: String,
+  }
+});
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -22,6 +39,7 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  scanRecords: [scanRecordSchema],
 });
 
 // generating authentication token

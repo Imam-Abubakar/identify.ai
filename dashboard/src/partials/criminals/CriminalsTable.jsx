@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DateAgeFormatter from "../../components/DateAgeFormatter"
 
 function CriminalsTable() {
-  const API_BASE_URL = "https://identify-api-jf4t.onrender.com";
+  const API_BASE_URL = "https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io";
   const [userData, setUserData] = useState([]);
   const navigate = useNavigate();
 

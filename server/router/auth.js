@@ -65,10 +65,15 @@ async function getDescriptorsFromDB(image) {
   let faces = await Criminal.find();
   for (i = 0; i < faces.length; i++) {
     for (j = 0; j < faces[i].descriptions.length; j++) {
-      faces[i].descriptions[j] = new Float32Array(Object.values(faces[i].descriptions[j]));
+      faces[i].descriptions[j] = new Float32Array(
+        Object.values(faces[i].descriptions[j])
+      );
     }
     // Turn the DB face docs to
-    faces[i] = new faceapi.LabeledFaceDescriptors(faces[i].firstName, faces[i].descriptions);
+    faces[i] = new faceapi.LabeledFaceDescriptors(
+      faces[i].firstName,
+      faces[i].descriptions
+    );
   }
 
   console.log(faces);
@@ -179,7 +184,7 @@ router.post("/register/admin", async (req, res) => {
 router.post("/login/user", async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body)
+    console.log(req.body);
 
     if (!email || !password) {
       return res
@@ -202,8 +207,12 @@ router.post("/login/user", async (req, res) => {
       if (!matchPassword) {
         return res.status(400).json({ message: "Invalid Credentials" });
       } else {
-        const { _id, name, email} = userLogin;
-        return res.status(200).json({ message: "Login Successful", token: token, user: {_id, name, email} });
+        const { _id, name, email } = userLogin;
+        return res.status(200).json({
+          message: "Login Successful",
+          token: token,
+          user: { _id, name, email },
+        });
       }
     } else {
       return res.status(400).json({ message: "Invalid Credentials" });
@@ -254,19 +263,18 @@ router.post("/login/admin", async (req, res) => {
 router.get("/profile/user/:id", async (req, res) => {
   const userId = req.params.id;
   try {
-    const user = await User.findById(userId)
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(400).json({
-        error: 'User not found',
+        error: "User not found",
       });
     }
-    console.log('fetching user');
+    console.log("fetching user");
     res.json(user);
   } catch (error) {
     console.log(error);
   }
-   
 });
 
 // GET admin PROFILE PAGE
@@ -442,5 +450,60 @@ router.get("/criminals", async (req, res) => {
   const allCriminals = await Criminal.find();
   res.send(allCriminals);
 });
+
+// ADD SCAN HISTORY
+router.post("/user/scan/add/:id", async (req, res) => {
+  const userId = req.params.id;
+  const { result, image, details } = req.body;
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+    user.scanRecords.push({ result, image, details });
+    await user.save();
+
+    res.json({ message: "Scan record added successfully" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while adding scan record" });
+  }
+});
+
+// GET SCAN HISTORY
+router.get("/user/scan/history/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+
+    const scanHistory = user.scanRecords.map((record) => ({
+      date: record.date,
+      result: record.result,
+      image: record.image,
+      details: record.details,
+    }));
+
+    res.status(200).json({ scanHistory });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while retrieving scan history" });
+  }
+});
+
+module.exports = router;
 
 module.exports = router;
