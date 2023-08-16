@@ -13,7 +13,7 @@ const History = () => {
     const [displaySingle, setDisplaySingle] = useState(false)
 
     const API_BASE_URL =
-        "https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io";
+        "https://identify-api-jf4t.onrender.com";
 
     const userID = JSON.parse(window.localStorage.getItem("user"));
 

@@ -12,7 +12,7 @@ function TotalDetected() {
         </header>
         <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2">Total Detected Criminals</h2>
         <div className="flex items-start">
-          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2 mb-4">12</div>
+          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2 mb-4">2</div>
         </div>
       </div>
     </div>

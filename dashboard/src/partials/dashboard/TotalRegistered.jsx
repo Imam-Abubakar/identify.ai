@@ -5,7 +5,7 @@ import Icon from '../../images/icon-01.svg';
 
 
 function TotalRegistered() {
-  const API_BASE_URL = "https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io";
+  const API_BASE_URL = "https://identify-api-jf4t.onrender.com";
   const [userData, setUserData] = useState([]);
   const navigate = useNavigate();
 

@@ -29,7 +29,7 @@ const Signup = () => {
     const sendData = async (e) => {
         e.preventDefault();
     
-        const response = await fetch("https://5000-imamabubakar-identifyai-m8w3es7skny.ws-eu103.gitpod.io/register/user", {
+        const response = await fetch("https://identify-api-jf4t.onrender.com/register/user", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
